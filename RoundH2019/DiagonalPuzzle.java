@@ -2,7 +2,15 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class DiagonalPuzzle {
-	
+	/*
+	1. go through all points 
+		-if point is white, color its corresponding diagonal to white
+	2. iterate over every "white diagonal" recursivly
+		stop if exceeds minmum found allready or no more unused diagonals
+		NOT all points on the diagonal
+		add this diagonal to used ones
+		
+	*/
 	private int solver(boolean[][] puzzle) {
 		boolean [] whiteDiagonals = new boolean[4*puzzle.length-2];
 		boolean [] usedDiagonals = new boolean[4*puzzle.length-2];
