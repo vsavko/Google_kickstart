@@ -39,6 +39,7 @@ public class Flattening {
 			//arrayCopy[i-1] = array[i-1]; 
 			//if (i == array.length - 1 ) arrayCopy[i] = array[i]; 
 		}
+		//System.out.println(diff);
 		
 		//decrease min element(s)
 		while(diff > limit) {
@@ -49,25 +50,31 @@ public class Flattening {
 				//chose min group, check if it has 2 same elements on the side
 				if (arrayGrouped[i].size < min) {
 					minGroup = arrayGrouped[i];
+					min = arrayGrouped[i].size;
 					k = 1; //decrease in difference
 				}
 				if (arrayGrouped[i].start > 0 && arrayGrouped[i].end < array.length-1 &&
 						arrayGrouped[i].size == min &&
-							arrayGrouped[arrayGrouped[i].start-1] == arrayGrouped[arrayGrouped[i].end+1]) { //if groups on two sides are equal
+							arrayGrouped[arrayGrouped[i].start-1].height == arrayGrouped[arrayGrouped[i].end+1].height) { //if groups on two sides are equal
 					minGroup = arrayGrouped[i];
 					k = 2; //decrease in difference
 				}
+				
 			}
+			//System.out.println("minGroup" + minGroup.id + " k " + k);
 			
 			if (minGroup == null) throw new IllegalArgumentException("minGroup is null!");
 			diff -= k;
 			
 			//add min group to left 
+			//System.out.println("minGroup.end" + (minGroup.end +1)+ " minGroup.start "+ minGroup.start);
 			if(minGroup.start - 1 > 0) {
+				//System.out.println("test1");
 				minGroup.height = arrayGrouped[minGroup.start - 1].height;
 			}
 			//to the right
-			else if (minGroup.end +1 < array.length-1) {
+			else if (minGroup.end +1 < array.length) {
+				//System.out.println("test");
 				minGroup.height = arrayGrouped[minGroup.end + 1].height;
 			}
 			
@@ -77,21 +84,23 @@ public class Flattening {
 				if(arrayGrouped[i].height == arrayGrouped[i-1].height &&
 						arrayGrouped[i].id != arrayGrouped[i-1].id ) {
 					arrayGrouped[i-1].size += arrayGrouped[i].size;
-					arrayGrouped[i-1].end += arrayGrouped[i].end;
-					System.out.println(arrayGrouped[i].start + " " + arrayGrouped[i].end);
+					arrayGrouped[i-1].end = arrayGrouped[i].end;
+					//System.out.println(arrayGrouped[i].start + " " + arrayGrouped[i].end);
 					for(int j = arrayGrouped[i].start ; j <= arrayGrouped[i].end ; j++) {
+						//System.out.println(j + " " + arrayGrouped.length);
 						arrayGrouped[j] = arrayGrouped[i-1];
 					}
 				}
 			}
 		}
-		
+		//System.out.println();
 		//find how many elements were changed from initial values
 		for (int i = 0; i < array.length; i++) {
-			System.out.println(arrayGrouped[i].height + " " + array[i]);
+			//System.out.printf("n %d, i %d id%d| ",arrayGrouped[i].height,array[i],arrayGrouped[i].id);
 			if (arrayGrouped[i].height != array[i])
 				++ans;
 		}
+		//System.out.println();
 		
 		return ans;
 	}
